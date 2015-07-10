@@ -28,7 +28,7 @@ def add_user():
                     request_dict.get("role"),
                     request_dict.get("months_at_company"),
                     None,
-                    datetime.utcnow(),
+                    datetime.datetime.now(),
                     True)
     db.session.add(new_user)
     db.session.commit()
@@ -59,4 +59,34 @@ def update_user(alias):
 
 @app.route('/pinchats', methods=['PUT'])
 def setup_pinchats():
-    pass
+    # get all the users to schedule
+    users_to_schedule = _get_users_to_schedule()
+    # TODO: bipartite matching
+    # TODO: send out emails
+    # TODO: update user last_scheduled field
+    return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
+
+def _get_users_to_schedule():
+    users = User.query.all()
+    users_to_schedule = []
+    wiggle_room = datetime.timedelta(hours=12)
+    for user in users:
+        next_date = user.last_scheduled
+        if user.frequency == '1w':
+            next_date += datetime.timedelta(weeks=1)
+        elif user.frequency == '2w':
+            next_date += datetime.timedelta(weeks=2)
+        elif user.frequency == '1m':
+            # get current month
+            current_month = datetime.datetime.now().month
+            if (next_date + datetime.timedelta(weeks=4)).month == next_date.month:
+                next_date += datetime.timedelta(weeks=5)
+            else:
+                next_date += datetime.timedelta(weeks=4)
+        else:
+            # ERROR!
+            raise Exception()
+        if next_date < datetime.datetime.now() - wiggle_room:
+            # this user needs to be scheduled
+            users_to_schedule.append((user, next_date))
+    return users_to_schedule
