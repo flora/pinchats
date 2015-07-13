@@ -3,9 +3,12 @@ from pinchats import app
 from models import User
 import datetime
 import simplejson
+from flask import Blueprint
 
 
-@app.route('/user', methods=['PUT'])
+pinchats_blueprint = BluePrint('pinchats', __name__)
+
+@pinchats_blueprint.route('/user', methods=['PUT'])
 def add_user():
     """ Creates a new user in the system.
     Inputs:
@@ -34,7 +37,7 @@ def add_user():
     db.session.commit()
     return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
 
-@app.route('/users/<string:email>', methods=['PUT'])
+@pinchats_blueprint.route('/users/<string:email>', methods=['PUT'])
 def update_user(email):
     """ Update user
     Inputs:
@@ -57,10 +60,10 @@ def update_user(email):
     db.session.commit()
     return Response(response=simplejson.dumps(non_existent_fields), status=status, mimetype='application/json')
 
-@app.route('/pinchats', methods=['PUT'])
+@pinchats_blueprint.route('/pinchats', methods=['PUT'])
 def setup_pinchats():
     # get all the users to schedule
-    users_to_schedule = _get_users_to_schedule()
+    # users_to_schedule = _get_users_to_schedule()
     # TODO: bipartite matching
     # TODO: send out emails
     # TODO: update user last_scheduled field
