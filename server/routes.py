@@ -10,19 +10,19 @@ def add_user():
     """ Creates a new user in the system.
     Inputs:
         name
-        alias
+        email
         frequency
         team_name
         role
         months_at_company
     Response:
         200 if created
-        409 if alias already exists
+        409 if email already exists
 
     """
     request_dict = request.get_json(force=True)
     new_user = User(request_dict.get("name"),
-                    request_dict.get("alias"),
+                    request_dict.get("email"),
                     request_dict.get("frequency"),
                     request_dict.get("team_name"),
                     request_dict.get("role"),
@@ -34,18 +34,18 @@ def add_user():
     db.session.commit()
     return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
 
-@app.route('/users/<string:alias>', methods=['PUT'])
-def update_user(alias):
+@app.route('/users/<string:email>', methods=['PUT'])
+def update_user(email):
     """ Update user
     Inputs:
         fields to be updated with new values
     Response:
         200 if success
         400 if failed validation
-        404 if alias doesn't exist
+        404 if email doesn't exist
     """
     request_dict = request.get_json(force=True)
-    user = User.query.filter_by(alias=alias).first()
+    user = User.query.filter_by(email=email).first()
     non_existent_fields = {}
     status = 200
     for attr in request_dict:
