@@ -1,0 +1,13 @@
+#content {
+    font-family: 'Lato';
+    font-weight: 300;
+}
+
+.formElement {
+    padding: 10px;
+}
+
+label {
+   padding-right: 10px;
+}
+
