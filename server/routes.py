@@ -1,12 +1,11 @@
-from flask import current_app, request, Response
-from pinchats import app
+from flask import current_app, request, Response, Blueprint
+from pinchats import db_session
 from models import User
 import datetime
 import simplejson
-from flask import Blueprint
 
 
-pinchats_blueprint = BluePrint('pinchats', __name__)
+pinchats_blueprint = Blueprint('pinchats', __name__)
 
 @pinchats_blueprint.route('/user', methods=['PUT'])
 def add_user():
@@ -24,17 +23,17 @@ def add_user():
 
     """
     request_dict = request.get_json(force=True)
-    new_user = User(request_dict.get("name"),
-                    request_dict.get("email"),
-                    request_dict.get("frequency"),
-                    request_dict.get("team_name"),
-                    request_dict.get("role"),
-                    request_dict.get("months_at_company"),
-                    None,
-                    datetime.datetime.now(),
-                    True)
-    db.session.add(new_user)
-    db.session.commit()
+    new_user = User(name=request_dict.get("name"),
+                    email=request_dict.get("email"),
+                    frequency=request_dict.get("frequency"),
+                    team_name=request_dict.get("team_name"),
+                    role=request_dict.get("role"),
+                    months_at_company=int(request_dict.get("months_at_company")),
+                    last_scheduled=None,
+                    date_joined=datetime.datetime.now(),
+                    active=True)
+    db_session.add(new_user)
+    db_session.commit()
     return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
 
 @pinchats_blueprint.route('/users/<string:email>', methods=['PUT'])
@@ -57,7 +56,7 @@ def update_user(email):
         else:
             non_existent_fields[attr] = request_dict.get(attr)
             status = 400
-    db.session.commit()
+    db_session.commit()
     return Response(response=simplejson.dumps(non_existent_fields), status=status, mimetype='application/json')
 
 @pinchats_blueprint.route('/pinchats', methods=['PUT'])

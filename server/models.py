@@ -1,18 +1,19 @@
-from pinchats import db
+from pinchats import Base
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
 
-class User(db.Model):
+
+class User(Base):
 
     __tablename__ = "user"
-
-    name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(80), primary_key=True, nullable=False)
-    frequency = db.Column(db.String(80), nullable=False)
-    team_name = db.Column(db.String(80), nullable=False)
-    role = db.Column(db.String(80), nullable=False)
-    months_at_company = db.Column(db.Integer, nullable=False)
-    last_scheduled = db.Column(db.DateTime, nullable=True)
-    date_joined = db.Column(db.DateTime, nullable=False)
-    active = db.Column(db.Boolean, nullable=False)
+    name = Column(String(120), nullable=False)
+    email = Column(String(80), primary_key=True, nullable=False)
+    frequency = Column(String(80), nullable=False)
+    team_name = Column(String(80), nullable=False)
+    role = Column(String(80), nullable=False)
+    months_at_company = Column(Integer, nullable=False)
+    last_scheduled = Column(DateTime, nullable=True)
+    date_joined = Column(DateTime, nullable=False)
+    active = Column(Boolean, nullable=False)
 
     def __init__(self, name, email, frequency, team_name, role, months_at_company, last_scheduled, date_joined, active):
         self.name = name
