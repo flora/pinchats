@@ -1,3 +1,4 @@
 *.py[cod]
 *.swp
 build/.module-cache/
+*.db
