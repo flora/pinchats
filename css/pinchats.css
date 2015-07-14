@@ -1,13 +1,44 @@
-#content {
-    font-family: 'Lato';
+body {
+    margin: 0;
+    padding 0;
+    font-family: 'Helvetica Neue', 'Lato';
     font-weight: 300;
+    min-width: 1060px;
+    color: #565656;
 }
 
 .formElement {
-    padding: 10px;
+    padding: 10px 0;
+}
+
+.mainHeading {
+    font-size: 32px;
+}
+
+.heading {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.formHeading {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 label {
    padding-right: 10px;
 }
 
+select {
+    background: #ddd;
+    border: 0;
+    height: 25px;
+}
+
+input {
+    height: 21px;
+    padding-left: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

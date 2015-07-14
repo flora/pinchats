@@ -19,6 +19,7 @@ var UserForm = React.createClass({
   render: function() {
     return (
 	      <form className="userForm" onSubmit={this.handleSubmit}>
+            <div className="heading formHeading">Join PinChats!</div>
             <div className="formElement">
                 <label>What is your prefered name?</label>
                 <input type="text" placeholder="Your name" ref="name" />
@@ -56,7 +57,177 @@ var UserForm = React.createClass({
   }
 });
 
+var Nav = React.createClass({
+    render: function() {
+        var navStyle = {
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-between',
+            height: '20px',
+            borderBottom: '1px solid #eee',
+            padding: '16px',
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#565656'
+        };
+        return (
+            <div className="nav" style={navStyle}>
+                <div className="logo">PinChats</div>
+                <div className="settings">Settings</div>
+            </div>
+        );
+    }
+});
+
+var About = React.createClass({
+    render: function() {
+        var imgUrl = 'images/mainImage.png';
+        var aboutStyle = {
+            alignItems: 'center',
+            display: 'flex',
+            color: 'white',
+            padding: '40px',
+            flexDirection: 'column',
+            backgroundImage: 'url(' + imgUrl + ')',
+            backgroundSize: 'cover',
+            marginBottom: '30px'
+        };
+
+        return (
+            <div className="about" style={aboutStyle}>
+                <div className="mainHeading">Welcome to PinChat!</div>
+                <ul>
+                    <li>Blah blah blah blah blah</li>
+                    <li>Blah blah blah blah blah</li>
+                    <li>Blah blah blah blah blah</li>
+                </ul>
+            </div>
+        );
+    }
+});
+
+var Trends = React.createClass({
+    render: function() {
+        var statStyle = {
+            mainSection: {
+                display: 'flex'
+            },
+            signedUp: {
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '100%',
+                margin: '20px 50px 10px 50px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '30px',
+
+                backgroundColor: '#DB9E27'
+            },
+            scheduled: {
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '100%',
+                margin: '20px 50px 10px 50px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '30px',
+
+                backgroundColor: '#0A909B'
+            },
+            remaining: {
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '100%',
+                margin: '20px 50px 10px 50px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '30px',
+
+                backgroundColor: '#C24A41'
+            },
+            text: {
+                fontSize: '14px',
+                textAlign: 'center',
+                marginBottom: '35px'
+            }
+        };
+
+        return (
+            <div className="trends">
+                <div className="heading">Trending stats:</div>
+                <div className="stats" style={statStyle.mainSection}>
+                    <div className="signedUp">
+                        <div style={statStyle.signedUp}>140</div>
+                        <div style={statStyle.text}>Pinployees signed up</div>
+                    </div>
+                    <div className="scheduled">
+                        <div style={statStyle.scheduled}>243</div>
+                        <div style={statStyle.text}>PinChats scheduled</div>
+                    </div>
+                    <div className="remaining">
+                        <div style={statStyle.remaining}>200</div>
+                        <div style={statStyle.text}>Pinployees to go</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+var Help = React.createClass({
+    render: function() {
+        return (
+            <div className="help">
+                <div className="heading">Helpful resources:</div>
+                <ul>
+                    <li>Blah blah blah blah blah</li>
+                    <li>Blah blah blah blah blah</li>
+                    <li>Blah blah blah blah blah</li>
+                </ul>
+            </div>
+        );
+    }
+});
+
+
+var PinChats = React.createClass({
+    render: function() {
+        var mainStyle = {
+            display: 'flex',
+            justifyContent: 'center'
+        };
+
+        var trendsAndHelp = {
+            marginLeft: '70px',
+            padding: '20px',
+            backgroundColor: '#eee'
+        }
+
+        return (
+            <div className="content">
+                <Nav />
+                <About />
+                <div className="main" style={mainStyle}>
+                    <div className="form">
+                        <UserForm />
+                    </div>
+                    <div className="trendsAndHelp" style={trendsAndHelp}>
+                        <Trends />
+                        <Help />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
 React.render(
-  <UserForm />,
+  <PinChats />,
   document.getElementById('content')
 );
