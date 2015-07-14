@@ -12,7 +12,8 @@ options.add_argument('-p', '--port', dest='port', default=9500,
 args = options.parse_args()
 
 # create the db engine
-engine = create_engine('sqlite:////Users/flora/hackathon/pinchats/pinchats.db', convert_unicode=True)
+curr_dir = os.getcwd()
+engine = create_engine('sqlite:///{0}/pinchats.db'.format(curr_dir), convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
