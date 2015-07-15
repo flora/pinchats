@@ -1,8 +1,11 @@
 from flask import current_app, request, Response, Blueprint
 from pinchats import db_session
 from models import User
+from server.libs.maximum_matching import matching
+from server.libs.calendar_invite import send_calendar_invites
 import datetime
 import simplejson
+import smtplib
 
 
 pinchats_blueprint = Blueprint('pinchats', __name__)
@@ -73,9 +76,11 @@ def setup_pinchats():
     # This returns a map u -> v with the matching for each user.
     # Note: both u -> v and v -> u are present in the map
     maximum_matching = matching(G)
-
+        
     # convert the returned matching into pinchat groups
-    pinchat_groups = list(set([sorted(key, value) for key, value in maximum_matching.iteritems()]))
+    pinchat_groups = set([tuple(sorted([key, value])) for key, value in maximum_matching.iteritems()])
+    # convert set of tuples to list of lists
+    pinchat_groups = [list(elem) for elem in pinchat_groups]
 
     # some people left out? randomly match them among themlselves
     remaining_users = [user for user in users_to_schedule if user not in maximum_matching]
@@ -89,12 +94,13 @@ def setup_pinchats():
     # pair remaining amongst themselves
     index = 0
     while index < len(remaining_users) - 1:
-        pinchat_groups.append([remaining_users[index], remaining_users[index+1])
+        pinchat_groups.append([remaining_users[index], remaining_users[index+1]])
         index += 2
 
     # send out emails
     for group in pinchat_groups:
-        _send_email(group)
+        send_calendar_invites([user.email for user in group])
+        # _send_email(group)
 
     # TODO: update user last_scheduled field
     return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
@@ -128,10 +134,11 @@ def _get_users_to_schedule():
     users_to_schedule = []
     wiggle_room = datetime.timedelta(hours=12)
     # add wiggle room to account for the time that the script might take to schedule PinChats
-    scheduling_time = datetime.now() + wiggle_room
+    scheduling_time = datetime.datetime.now() + wiggle_room
     for user in users:
-        next_date = user.last_scheduled
-        if user.frequency == '1w' and scheduling_time >= user.last_scheduled + datetime.timedelta(weeks=1):
+        if user.last_scheduled is None:
+            users_to_schedule.append(user)
+        elif user.frequency == '1w' and scheduling_time >= user.last_scheduled + datetime.timedelta(weeks=1):
             users_to_schedule.append(user)
         elif user.frequency == '2w' and scheduling_time >= user.last_scheduled + datetime.timedelta(weeks=2):
             users_to_schedule.append(user)
