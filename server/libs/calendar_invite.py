@@ -5,7 +5,7 @@ from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 import os,datetime
-
+from server.libs.calendar_free import get_free_time
 
 def send_calendar_invites(user_emails):
     CRLF = "\r\n"
@@ -15,15 +15,14 @@ def send_calendar_invites(user_emails):
     organizer = "ORGANIZER;CN=PinChats:mailto:pinchats"+CRLF+" @pinterest.com"
     fro = "PinChats <pinchats@pinterest.com>"
     
-    ddtstart = datetime.datetime.now()
-    dtoff = datetime.timedelta(days = 1)
-    dur = datetime.timedelta(hours = 1)
-    ddtstart = ddtstart +dtoff
-    dtend = ddtstart + dur
+    ddtstart, dtend = get_free_time(user_emails)
+    if not ddtstart:
+         # could not find any overlapping times for the users
+         return
     dtstamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%SZ")
     dtstart = ddtstart.strftime("%Y%m%dT%H%M%SZ")
     dtend = dtend.strftime("%Y%m%dT%H%M%SZ")
-    
+   
     description = "DESCRIPTION: test invitation from pyICSParser"+CRLF
     attendee = ""
     for att in attendees:
