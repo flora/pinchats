@@ -7,6 +7,7 @@ var UserForm = React.createClass({displayName: "UserForm",
   handleSubmit: function(e) {
     e.preventDefault();
     var name = React.findDOMNode(this.refs.name).value.trim();
+    var email = React.findDOMNode(this.refs.email).value.trim();
     var team = React.findDOMNode(this.refs.team).value.trim();
     var role = React.findDOMNode(this.refs.role).value.trim();
     var frequency = React.findDOMNode(this.refs.frequency).value.trim();
@@ -16,10 +17,11 @@ var UserForm = React.createClass({displayName: "UserForm",
     }
     var json = {}
     json.name = name;
+    json.email = email;
     json.team = team;
     json.role = role;
     json.frequency = frequency;
-    json.time_at_company = json.time_at_company;
+    json.time_at_company = timeAtCompany;
     $.ajax({
       url: '/user',
       type: 'PUT',
@@ -30,6 +32,7 @@ var UserForm = React.createClass({displayName: "UserForm",
     });
     //this.props.onUserSubmit({name: name, team: team, role: role, frequency: frequency, timeAtCompany: timeAtCompany});
     React.findDOMNode(this.refs.name).value = '';
+    React.findDOMNode(this.refs.email).value = '';
     React.findDOMNode(this.refs.team).value = '';
     React.findDOMNode(this.refs.role).value = '';
     React.findDOMNode(this.refs.frequency).value = '';
@@ -44,6 +47,10 @@ var UserForm = React.createClass({displayName: "UserForm",
                 React.createElement("input", {type: "text", placeholder: "Your name", ref: "name"})
             ), 
             React.createElement("div", {className: "formElement"}, 
+                React.createElement("label", null, "What is your pinterest email?"), 
+                React.createElement("input", {type: "text", placeholder: "Email", ref: "email"})
+            ), 
+            React.createElement("div", {className: "formElement"}, 
             React.createElement("label", null, "What team are you on?"), 
                 React.createElement("input", {type: "text", placeholder: "Team name", ref: "team"})
             ), 
@@ -53,10 +60,10 @@ var UserForm = React.createClass({displayName: "UserForm",
             ), 
             React.createElement("div", {className: "formElement"}, 
                 React.createElement("label", null, "How often would you like to be matched with a Pinployee?"), 
-                React.createElement("select", {value: "biweekly", ref: "frequency"}, 
-                    React.createElement("option", {value: "weekly"}, "Weekly"), 
-                    React.createElement("option", {value: "biweekly"}, "Bi-weekly"), 
-                    React.createElement("option", {value: "monthly"}, "Monthly")
+                React.createElement("select", {ref: "frequency"}, 
+                    React.createElement("option", {value: "1w"}, "Weekly"), 
+                    React.createElement("option", {value: "2w"}, "Bi-weekly"), 
+                    React.createElement("option", {value: "1m"}, "Monthly")
                 )
             ), 
             React.createElement("div", {className: "formElement"}, 

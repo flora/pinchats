@@ -1,6 +1,7 @@
 from flask import current_app, request, Response, Blueprint, send_from_directory
 from pinchats import db_session
 from models import User
+# from server.libs.auth import get_employee, login
 from server.libs.maximum_matching import matching
 from server.libs.calendar_invite import send_calendar_invites
 import datetime
@@ -14,6 +15,11 @@ client_dir = "/mnt/pinchats/client"
 
 @pinchats_blueprint.route('/')
 def index():
+    # employee_ldap = get_employee(request)
+    # if not employee_ldap:
+    #     login(request, redirect_path="/")
+    # else:
+    #     request.user = employee_ldap
     return static_proxy('index.html')
 
 @pinchats_blueprint.route('/client/<path:filename>')
@@ -27,9 +33,9 @@ def add_user():
         name
         email
         frequency
-        team_name
+        team
         role
-        months_at_company
+        time_at_company
     Response:
         200 if created
         409 if email already exists
@@ -39,9 +45,9 @@ def add_user():
     new_user = User(name=request_dict.get("name"),
                     email=request_dict.get("email"),
                     frequency=request_dict.get("frequency"),
-                    team_name=request_dict.get("team_name"),
+                    team=request_dict.get("team"),
                     role=request_dict.get("role"),
-                    months_at_company=int(request_dict.get("months_at_company")),
+                    time_at_company=request_dict.get("time_at_company"),
                     last_scheduled=None,
                     date_joined=datetime.datetime.now(),
                     active=True)
