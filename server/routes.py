@@ -115,26 +115,6 @@ def setup_pinchats():
     # TODO: update user last_scheduled field
     return Response(response=simplejson.dumps({}), status=200, mimetype='application/json')
 
-def _send_email(group):
-    from_addr = 'pinchats@pinterest.com'
-    to_addr_list = [user.email for user in group]
-    subject = 'We have a new PinChat for you!'
-    message = 'Hey! How about meeting your co-worker for a chat?'
-    login = 'anshul@pinterest.com'
-    password = 'vflaeybjgriqfabn'
-    smtpserver='smtp.gmail.com:587'
-
-    header  = 'From: %s\n' % from_addr
-    header += 'To: %s\n' % ','.join(to_addr_list)
-    header += 'Subject: %s\n\n' % subject
-    message = header + message
- 
-    server = smtplib.SMTP(smtpserver)
-    server.starttls()
-    server.login(login,password)
-    problems = server.sendmail(from_addr, to_addr_list, message)
-    server.quit()
-
 def _get_pinchat_candidates(user, users_to_schedule):
     # all other users are possible candidates right now
     return [candidate for candidate in users_to_schedule if candidate != user]
