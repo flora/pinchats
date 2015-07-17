@@ -1,14 +1,24 @@
-from flask import current_app, request, Response, Blueprint
+from flask import current_app, request, Response, Blueprint, send_from_directory
 from pinchats import db_session
 from models import User
 from server.libs.maximum_matching import matching
 from server.libs.calendar_invite import send_calendar_invites
 import datetime
+import os
 import simplejson
 import smtplib
 
 
 pinchats_blueprint = Blueprint('pinchats', __name__)
+client_dir = "/mnt/pinchats/client"
+
+@pinchats_blueprint.route('/')
+def index():
+    return static_proxy('index.html')
+
+@pinchats_blueprint.route('/client/<path:filename>')
+def static_proxy(filename):
+    return send_from_directory(client_dir, filename)
 
 @pinchats_blueprint.route('/user', methods=['PUT'])
 def add_user():

@@ -1,3 +1,8 @@
+var script = document.createElement('script');
+script.src = 'http://code.jquery.com/jquery-1.11.0.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
 var UserForm = React.createClass({displayName: "UserForm",
   handleSubmit: function(e) {
     e.preventDefault();
@@ -9,6 +14,20 @@ var UserForm = React.createClass({displayName: "UserForm",
     if (!name) {
       return;
     }
+    var json = {}
+    json.name = name;
+    json.team = team;
+    json.role = role;
+    json.frequency = frequency;
+    json.time_at_company = json.time_at_company;
+    $.ajax({
+      url: '/user',
+      type: 'PUT',
+      data: JSON.stringify(json),
+      success: function(data) {
+        alert('Load was performed.');
+      }
+    });
     //this.props.onUserSubmit({name: name, team: team, role: role, frequency: frequency, timeAtCompany: timeAtCompany});
     React.findDOMNode(this.refs.name).value = '';
     React.findDOMNode(this.refs.team).value = '';
@@ -81,7 +100,7 @@ var Nav = React.createClass({displayName: "Nav",
 
 var About = React.createClass({displayName: "About",
     render: function() {
-        var imgUrl = 'images/mainImage.png';
+        var imgUrl = 'client/images/mainImage.png';
         var aboutStyle = {
             alignItems: 'center',
             display: 'flex',
