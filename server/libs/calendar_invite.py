@@ -34,7 +34,7 @@ def send_calendar_invites(user_emails):
     ical+= attendee+"CREATED:"+dtstamp+CRLF+description+"LAST-MODIFIED:"+dtstamp+CRLF+"LOCATION:"+CRLF+"SEQUENCE:0"+CRLF+"STATUS:CONFIRMED"+CRLF
     ical+= "SUMMARY:test "+ddtstart.strftime("%Y%m%d @ %H:%M")+CRLF+"TRANSP:OPAQUE"+CRLF+"END:VEVENT"+CRLF+"END:VCALENDAR"+CRLF
 
-    eml_body = "Email body visible in the invite of outlook and outlook.com but not google calendar"
+    eml_body = "You've got a PinChat scheduled! Feel free to coordinate and reschedule at a more convenient time. Plan to meet by the blue art structure in 808 near the 572 7th Strreet."
     eml_body_bin = "This is the email body in binary - two steps"
     msg = MIMEMultipart('mixed')
     msg['Reply-To']=fro
